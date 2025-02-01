@@ -12,7 +12,7 @@ API_KEY="your-namecheap-api-key"
 
 CREATE_DOMAIN="_acme-challenge.$CERTBOT_DOMAIN"
 
-/opt/certbot-auth/openjdk-jre-21/bin/java -jar certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" "$CERTBOT_VALIDATION"
+/opt/certbot-auth/openlogic-openjdk-jre-21.0.3+9-linux-x64/bin/java -jar certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" "$CERTBOT_VALIDATION"
 
 retry=1
 

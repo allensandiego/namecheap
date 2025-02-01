@@ -6,7 +6,7 @@ set -e
 
 appname=certbot-auth
 appdir=/opt/$appname
-javadir=$appdir/openjdk-jre-21
+jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
 
 if [ ! -d $appdir ]; then
   mkdir -m 755 $appdir
@@ -19,11 +19,11 @@ echo "Installation directory... $appdir"
 cd $appdir
 
 echo "Download openjdk-jre-21..." 
-wget -O openjdk-jre-21.tar.gz https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
+wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
 
 echo "Unzip openjdk-jre-21..."
-chmod 755 -R $appdir/openjdk-jre-21.tar.gz
-tar -xv $appdir/openjdk-jre-21.tar.gz --transform $javadir
+chmod 755 -R $appdir/$jdk
+tar xvzf $appdir/$jdk
 
 echo "Download namecheap certbot files..."
 wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh
