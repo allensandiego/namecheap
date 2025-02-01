@@ -5,7 +5,7 @@ set -e
 appname=certbot-auth
 appdir=/opt/$appname
 
-if [ ! -d $appdir ]l then
+if [ ! -d $appdir ]; then
   mkdir -m 755 $appdir
 fi
 
