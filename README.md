@@ -1,5 +1,12 @@
 # Certbot-Auth
 
+### Required packages
+```console
+curl
+```
+### Notes
+> Script will install packages wget, 
+
 ### Installation
 
 ```bash

@@ -2,6 +2,8 @@
 
 set -e
 
+apt install wget -y
+
 appname=certbot-auth
 appdir=/opt/$appname
 
@@ -11,12 +13,13 @@ fi
 
 cd $appdir
 
-curl -s https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh
+curl -sSL https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz --output openjdk-jre-21.tar.gz | tar -xvzf
+curl -sSL https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh -o
+curl -sSL https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar -o
 
-apt install wget
-
-wget https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar
-
+chmod 755 openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
+chmod 755 certbot-auth.sh
 chmod 755 certbot-auth.jar
+
 
 
