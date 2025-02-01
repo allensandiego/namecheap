@@ -33,6 +33,7 @@
     </dependency>
   </dependencies>
   <build>
+    <finalName>${artifactId}</finalName>
     <plugins>
       <plugin>
         <!-- Build an executable JAR -->
@@ -60,6 +61,8 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId>
+          <outputDirectory>./</outputDirectory>
         </configuration>
       </plugin>
     </plugins>

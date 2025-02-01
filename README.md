@@ -1,1 +1,8 @@
-# namecheap
+# Certbot-Auth
+
+### Installation
+
+```bash
+curl -sSL https://github.com/allensandiego/namecheap/blob/main/certbot-auth_install.sh | bash
+```
+
