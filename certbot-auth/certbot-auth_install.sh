@@ -14,8 +14,8 @@ fi
 cd $appdir
 
 curl -sSL https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz --output openjdk-jre-21.tar.gz | tar -xvzf
-curl -sSL https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh -o
-curl -sSL https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar -o
+curl -sSL https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh -o certbot-auth.sh
+curl -sSL https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar -o certbot-auth.jar
 
 chmod 755 openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
 chmod 755 certbot-auth.sh
