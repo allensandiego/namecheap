@@ -3,6 +3,6 @@
 ### Installation
 
 ```bash
-curl -sSL https://github.com/allensandiego/namecheap/blob/main/certbot-auth_install.sh | bash
+curl -sSL https://github.com/allensandiego/namecheap/blob/main/certbot-auth/certbot-auth_install.sh | bash
 ```
 
