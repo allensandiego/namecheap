@@ -1,7 +1,9 @@
 #!/bin/bash
 
+
+
 # Get your Api User and Api Key from env file
-. certbot-auth.env
+. $(dirname "$0")/certbot-auth.env
 
 # Execute certbot-auth.jar with the following parameters:
 # 1. ApiUser

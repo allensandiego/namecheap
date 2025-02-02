@@ -16,14 +16,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 
-import com.asandiego.nc.models.ApiRequest;
 import com.asandiego.nc.models.ApiResponse;
-import com.asandiego.nc.models.AuthDetails;
 import com.asandiego.nc.models.Host;
-import com.asandiego.nc.models.Request;
 import com.asandiego.nc.models.RequestValue;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 public class Main {
