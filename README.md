@@ -29,8 +29,9 @@ sudo certbot certonly --manual --manual-auth-hook /opt/certbot-auth/certbot-auth
 ### Disclaimer
 A few notes about the script.
 
-- Tested on Debian 12.
-- Tested on domains with less than 10 entries.
+- Tested only Debian 12.
+- Tested only domains with less than 10 entries.
 - Generates response-{datetime}.xml listing all dns host entries in specified domain and request-{datetime}.txt showing the http get url on the install/application directory.
 
 Use at your own risk.
+

@@ -7,6 +7,7 @@ set -e
 appname=certbot-auth
 appdir=/opt/$appname
 jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
+ncenv=namecheap.env
 
 if [ ! -d $appdir ]; then
   mkdir -m 755 $appdir
@@ -33,6 +34,17 @@ wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/R
 chmod 755 $appdir/certbot-auth.sh
 chmod 755 $appdir/certbot-auth.jar
 chmod 755 $appdir/README.md
+
+echo "Enter your namecheap Api User and Api Key"
+read -p 'Api User: ' API_USER
+read -ps 'Api Key: ' API_KEY
+
+if [ -f "$ncenv" ]; then
+  rm $ncenv
+fi
+
+echo "API_USER=$API_USER" >> $ncenv
+echo "API_KEY=$API_KEY" >> $ncenv
 
 echo "Installation finished."
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
@@ -93,7 +92,6 @@ public class Main {
         System.out.println(httpResponse.body());
 
         XmlMapper mapper = new XmlMapper();
-        // mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         ApiResponse apiResponse = mapper.readValue(httpResponse.body(), ApiResponse.class);
 
         if (apiResponse.getStatus().equals("ERROR")) {
@@ -125,20 +123,6 @@ public class Main {
         }
 
         List<String> keyList = Arrays.asList("HostName", "RecordType", "Address", "TTL");
-
-        ApiRequest apiRequest = new ApiRequest();
-        AuthDetails authDetails = new AuthDetails();
-        authDetails.setClientIp("0.0.0.0");
-        authDetails.setUserName(apiUser);
-        authDetails.setDisableSecurityNotification(true);
-        authDetails.setAllowWhenDomainLocked(true);
-        authDetails.setProceedWhenDomainLockedFlag(true);
-
-        List<String> roles = new ArrayList<>();
-        roles.add("User");
-
-        authDetails.setRoles(roles);
-
         List<RequestValue> requestValues = new ArrayList<>();
 
         for (int i = 0; i < hosts.size(); i++) {
@@ -157,19 +141,6 @@ public class Main {
                 }
             }
         }
-
-        Request request = new Request(requestValues);
-        request.setSld(sld);
-        request.setTld(tld);
-
-        apiRequest.setAuthDetails(authDetails);
-        apiRequest.setRequest(request);
-
-        JsonMapper jsonMapper = new JsonMapper();
-        jsonMapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
-        jsonMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
-
-        String json = jsonMapper.writeValueAsString(apiRequest);
 
         URIBuilder builder = new URIBuilder("https://api.namecheap.com/xml.response")
         .addParameter("ApiUser", apiUser)

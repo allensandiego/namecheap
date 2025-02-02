@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Get your API key from https://ap.www.namecheap.com/settings/tools
-API_USER="your-namecheap-username"
-API_KEY="your-namecheap-api-key"
+# Get your Api User and Api Key from env file
+. ncenv.env
 
 # Execute certbot-auth.jar with the following parameters:
 # 1. ApiUser
@@ -16,12 +15,10 @@ CREATE_DOMAIN="_acme-challenge.$CERTBOT_DOMAIN"
 
 retry=1
 
-TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')
-
 while [ "$CERTBOT_VALIDATION" != "$TXT" ]; do
   TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')
-  sleep 30
-  if [ $retry -ge 4 ]; then
+  sleep 15
+  if [ $retry -ge 8 ]; then
     echo "Failed to retrieve certbort certificates. Max retries reached."
     exit 1
   fi
