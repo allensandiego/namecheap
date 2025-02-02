@@ -17,7 +17,7 @@ CREATE_DOMAIN="_acme-challenge.$CERTBOT_DOMAIN"
 $jdkdir/bin/java -jar $appdir/certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" "$CERTBOT_VALIDATION"
 
 retry=1
-
+TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')
 #Wait a few times and check if TXT record is updated
 while [ "$CERTBOT_VALIDATION" != "$TXT" ]; do
   sleep 15
