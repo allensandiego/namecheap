@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get your Api User and Api Key from env file
-. certboth-auth.env
+. certbot-auth.env
 
 # Execute certbot-auth.jar with the following parameters:
 # 1. ApiUser
@@ -16,8 +16,8 @@ $jdkdir/bin/java -jar certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" 
 retry=1
 
 while [ "$CERTBOT_VALIDATION" != "$TXT" ]; do
-  TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')
   sleep 15
+  TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')
   if [ $retry -ge 8 ]; then
     echo "Failed to retrieve certbort certificates. Max retries reached."
     exit 1
