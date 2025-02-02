@@ -2,8 +2,6 @@ package com.asandiego.nc;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 public class Main {
 
+    private static Logger logger;
     private static String apiUser, apiKey, domain, sld, tld, txt;
     private static String subdomain = "";
     private static String createDomain = "_acme-challenge";
@@ -32,34 +34,33 @@ public class Main {
 
     private static Date date = new Date();
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-
-    private static File appDir = new File("/opt/certbot-auth");
-    private static File backupDir = new File(appDir, "backup");
-    private static File logDir = new File(appDir, "log");
-
-    private static File responseFile = new File(backupDir, String.format("response-%s.xml",dateFormat.format(date)));
-    private static File requestFile = new File(backupDir, String.format(".resquest-%s.txt",dateFormat.format(date)));
-
-    private static void writeLog(String line) throws IOException {
-        File logfile = new File(logDir, String.format("log-%s.txt", dateFormat.format(date)));
-        FileWriter writer = new FileWriter(logfile);
-        Date date = new Date();
-        writer.append(String.format("%s -> %s", dateFormat.format(date), line));
-        writer.close();
-        writer.flush();
-    }
-
     public static void main(String[] args) throws Exception {
+
+        File appDir = new File("/opt/certbot-auth");
+        File backupDir = new File(appDir, "backup");
+        File logDir = new File(appDir, "log");
+
+        File responseFile = new File(backupDir, String.format("response-%s.xml",dateFormat.format(date)));
+        File requestFile = new File(backupDir, String.format(".resquest-%s.txt",dateFormat.format(date)));
+        File logfile = new File(logDir, String.format("log-%s.log", dateFormat.format(date)));
         
+        FileHandler logHandler = new FileHandler(logfile.getAbsolutePath());
+        logHandler.setFormatter(new SimpleFormatter());
+
+        logger = Logger.getLogger(Main.class.getName());
+        logger.addHandler(logHandler);
+
+        logger.info("Begin request");
+        System.exit(0);
+
         apiUser = args[0];
         apiKey = args[1];
         domain = args[2];
         txt = args[3];
 
-        writeLog("Begin request");
-        writeLog(String.format("Api User: %s", apiUser));
-        writeLog(String.format("Domain: %s", domain));
-        writeLog(String.format("Txt: %s", txt));
+        logger.info(String.format("Api User: %s", apiUser));
+        logger.info(String.format("Domain: %s", domain));
+        logger.info(String.format("Txt: %s", txt));
 
         String[] s = domain.split("\\.");
 
@@ -80,7 +81,7 @@ public class Main {
             createDomain = StringUtils.stripEnd(createDomain, ".");
         }
 
-        writeLog(String.format("Create Domain: %s", createDomain));
+        logger.info(String.format("Create Domain: %s", createDomain));
 
         Host createHost = new Host();
         createHost.setType("TXT");
@@ -99,7 +100,7 @@ public class Main {
                 .addParameter("TLD", tld)
                 .build();
         
-        writeLog(String.format("getHosts-URI: %s", getUri.toString()));
+        logger.info(String.format("getHosts-URI: %s", getUri.toString()));
 
         HttpRequest get = HttpRequest.newBuilder()
                 .uri(getUri)
@@ -109,7 +110,7 @@ public class Main {
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> httpResponse = client.send(get, BodyHandlers.ofString());
 
-        writeLog(String.format("getHosts-Response: %s", httpResponse.body()));
+        logger.info(String.format("getHosts-Response: %s", httpResponse.body()));
 
         XmlMapper mapper = new XmlMapper();
         ApiResponse apiResponse = mapper.readValue(httpResponse.body(), ApiResponse.class);
@@ -177,7 +178,7 @@ public class Main {
 
         URI postUri = builder.build();
 
-        writeLog(String.format("setHosts-URI: %s", postUri.toString()));
+        logger.info(String.format("setHosts-URI: %s", postUri.toString()));
 
         FileOutputStream os = new FileOutputStream(requestFile);
         os.write(postUri.toString().replaceFirst("\\bApiKey=.*?(&|$)", "ApiKey=***&").getBytes());
@@ -190,7 +191,7 @@ public class Main {
                 .build();
 
         HttpResponse<String> postResponse = client.send(post, BodyHandlers.ofString());
-        writeLog(String.format("setHosts-Response: %s", postResponse.body()));
+        logger.info(String.format("setHosts-Response: %s", postResponse.body()));
     }
 
 }
