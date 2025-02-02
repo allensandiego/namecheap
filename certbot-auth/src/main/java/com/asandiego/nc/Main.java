@@ -51,7 +51,6 @@ public class Main {
         logger.addHandler(logHandler);
 
         logger.info("Begin request");
-        System.exit(0);
 
         apiUser = args[0];
         apiKey = args[1];

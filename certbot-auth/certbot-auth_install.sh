@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 
 jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64
 
@@ -70,5 +71,6 @@ echo "Installation finished."
 
 cat $appdir/README.md
 
+echo
 
 
