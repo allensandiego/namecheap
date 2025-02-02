@@ -33,8 +33,16 @@ public class Main {
     private static Date date = new Date();
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
 
-    private static void writeLog(File file, String line) throws IOException {
-        FileWriter writer = new FileWriter(file);
+    private static File appDir = new File("/opt/certbot-auth");
+    private static File backupDir = new File(appDir, "backup");
+    private static File logDir = new File(appDir, "log");
+
+    private static File responseFile = new File(backupDir, String.format("response-%s.xml",dateFormat.format(date)));
+    private static File requestFile = new File(backupDir, String.format(".resquest-%s.txt",dateFormat.format(date)));
+
+    private static void writeLog(String line) throws IOException {
+        File logfile = new File(logDir, String.format("log-%s.txt", dateFormat.format(date)));
+        FileWriter writer = new FileWriter(logfile);
         Date date = new Date();
         writer.append(String.format("%s -> %s", dateFormat.format(date), line));
         writer.close();
@@ -42,24 +50,16 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-
-        File appDir = new File("/opt/certbot-auth");
-        File backupDir = new File(appDir, "backup");
-        File logDir = new File(appDir, "log");
-
-        File responseFile = new File(backupDir, String.format("response-%s.xml",dateFormat.format(date)));
-        File requestFile = new File(backupDir, String.format(".resquest-%s.txt",dateFormat.format(date)));
-        File logfile = new File(logDir, String.format("log-%s.txt", dateFormat.format(date)));
         
         apiUser = args[0];
         apiKey = args[1];
         domain = args[2];
         txt = args[3];
 
-        writeLog(logfile, "Begin request");
-        writeLog(logfile, String.format("Api User: %s", apiUser));
-        writeLog(logfile, String.format("Domain: %s", domain));
-        writeLog(logfile, String.format("Txt: %s", txt));
+        writeLog("Begin request");
+        writeLog(String.format("Api User: %s", apiUser));
+        writeLog(String.format("Domain: %s", domain));
+        writeLog(String.format("Txt: %s", txt));
 
         String[] s = domain.split("\\.");
 
@@ -80,7 +80,7 @@ public class Main {
             createDomain = StringUtils.stripEnd(createDomain, ".");
         }
 
-        writeLog(logfile, String.format("Create Domain: %s", createDomain));
+        writeLog(String.format("Create Domain: %s", createDomain));
 
         Host createHost = new Host();
         createHost.setType("TXT");
@@ -99,7 +99,7 @@ public class Main {
                 .addParameter("TLD", tld)
                 .build();
         
-        writeLog(logfile, String.format("getHosts-URI: %s", getUri.toString()));
+        writeLog(String.format("getHosts-URI: %s", getUri.toString()));
 
         HttpRequest get = HttpRequest.newBuilder()
                 .uri(getUri)
@@ -109,7 +109,7 @@ public class Main {
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> httpResponse = client.send(get, BodyHandlers.ofString());
 
-        writeLog(logfile, String.format("getHosts-Response: %s", httpResponse.body()));
+        writeLog(String.format("getHosts-Response: %s", httpResponse.body()));
 
         XmlMapper mapper = new XmlMapper();
         ApiResponse apiResponse = mapper.readValue(httpResponse.body(), ApiResponse.class);
@@ -177,7 +177,7 @@ public class Main {
 
         URI postUri = builder.build();
 
-        writeLog(logfile, String.format("setHosts-URI: %s", postUri.toString()));
+        writeLog(String.format("setHosts-URI: %s", postUri.toString()));
 
         FileOutputStream os = new FileOutputStream(requestFile);
         os.write(postUri.toString().replaceFirst("\\bApiKey=.*?(&|$)", "ApiKey=***&").getBytes());
@@ -190,7 +190,7 @@ public class Main {
                 .build();
 
         HttpResponse<String> postResponse = client.send(post, BodyHandlers.ofString());
-        writeLog(logfile, String.format("setHosts-Response: %s", postResponse.body()));
+        writeLog(String.format("setHosts-Response: %s", postResponse.body()));
     }
 
 }
