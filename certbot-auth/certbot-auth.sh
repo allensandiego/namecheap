@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+set -e
 
 # Get your Api User and Api Key from env file
 . $(dirname "$0")/certbot-auth.env
@@ -13,10 +14,11 @@
 
 CREATE_DOMAIN="_acme-challenge.$CERTBOT_DOMAIN"
 
-$jdkdir/bin/java -jar certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" "$CERTBOT_VALIDATION"
+$jdkdir/bin/java -jar $appdir/certbot-auth.jar "$API_USER" "$API_KEY" "$CERTBOT_DOMAIN" "$CERTBOT_VALIDATION"
 
 retry=1
 
+#Wait a few times and check if TXT record is updated
 while [ "$CERTBOT_VALIDATION" != "$TXT" ]; do
   sleep 15
   TXT=$(dig -t txt "$CREATE_DOMAIN" +short | tr -d '"')

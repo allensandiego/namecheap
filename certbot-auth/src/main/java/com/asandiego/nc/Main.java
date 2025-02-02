@@ -2,6 +2,8 @@ package com.asandiego.nc;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -28,18 +30,33 @@ public class Main {
     private static String createDomain = "_acme-challenge";
     private static boolean updated = false;
 
+    private static Date date = new Date();
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+
+    private static void writeLog(File file, String line) throws IOException {
+        FileWriter writer = new FileWriter(file);
+        Date date = new Date();
+        writer.append(String.format("%s -> %s", dateFormat.format(date), line));
+        writer.close();
+        writer.flush();
+    }
+
     public static void main(String[] args) throws Exception {
 
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
 
-        File responseFile = new File(String.format("response-%s.xml",dateFormat.format(date)));
-        File requestFile = new File(String.format("resquest-%s.txt",dateFormat.format(date)));
-
+        File responseFile = new File(String.format("backup/response-%s.xml",dateFormat.format(date)));
+        File requestFile = new File(String.format("backup/resquest-%s.txt",dateFormat.format(date)));
+        File logfile = new File(String.format("log/log-%s.txt", dateFormat.format(date)));
+        
         apiUser = args[0];
         apiKey = args[1];
         domain = args[2];
         txt = args[3];
+
+        writeLog(logfile, "Begin request");
+        writeLog(logfile, String.format("Api User: %s", apiUser));
+        writeLog(logfile, String.format("Domain: %s", domain));
+        writeLog(logfile, String.format("Txt: %s", txt));
 
         String[] s = domain.split("\\.");
 
@@ -60,6 +77,8 @@ public class Main {
             createDomain = StringUtils.stripEnd(createDomain, ".");
         }
 
+        writeLog(logfile, String.format("Create Domain: %s", createDomain));
+
         Host createHost = new Host();
         createHost.setType("TXT");
         createHost.setName(createDomain);
@@ -76,6 +95,8 @@ public class Main {
                 .addParameter("SLD", sld)
                 .addParameter("TLD", tld)
                 .build();
+        
+        writeLog(logfile, String.format("Get-URI: %s", getUri.toString()));
 
         HttpRequest get = HttpRequest.newBuilder()
                 .uri(getUri)
@@ -85,6 +106,8 @@ public class Main {
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> httpResponse = client.send(get, BodyHandlers.ofString());
         System.out.println(httpResponse.body());
+
+        writeLog(logfile, String.format("Get-Response: %s", httpResponse.body()));
 
         XmlMapper mapper = new XmlMapper();
         ApiResponse apiResponse = mapper.readValue(httpResponse.body(), ApiResponse.class);

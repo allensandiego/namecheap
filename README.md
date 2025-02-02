@@ -31,6 +31,7 @@ A few notes about the script.
 
 - Tested only Debian 12.
 - Tested only domains with less than 10 entries.
+- Tested only as root user.
 - Generates response-{datetime}.xml listing all dns host entries in specified domain and request-{datetime}.txt showing the http get url on the install/application directory.
 
 Use at your own risk.

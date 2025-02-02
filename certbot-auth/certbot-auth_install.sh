@@ -5,6 +5,8 @@ jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64
 appname=certbot-auth
 appdir=/opt/$appname
 jdkdir=$appdir/$jdk
+backupdir=$appdir/backup
+logdir=$appdir/log
 
 echo
 echo "Installation started."
@@ -17,6 +19,14 @@ echo
 echo "Installation directory... $appdir"
 if [ ! -d $appdir ]; then
   mkdir -m 755 $appdir
+fi
+
+if [ ! -d $backupdir ]; then
+  mkdir -m 755 $backupdir
+fi
+
+if [ ! -d $logdir ]; then
+  mkdir -m 755 $logdir
 fi
 
 cd $appdir
@@ -34,6 +44,7 @@ echo
 echo "Unzip openjdk-jre-21..."
 chmod 755 -R $appdir/$jdk.tar.gz
 tar xvzf $appdir/$jdk.tar.gz
+rm $appdir/$jdk.tar.gz
 
 echo
 echo "Download namecheap certbot files..."
