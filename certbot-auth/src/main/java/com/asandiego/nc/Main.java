@@ -43,7 +43,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        File appDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        File appDir = new File("/opt/certbot-auth");
         File backupDir = new File(appDir, "backup");
         File logDir = new File(appDir, "log");
 
