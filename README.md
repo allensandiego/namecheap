@@ -12,10 +12,10 @@ curl -sSL https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/m
 ```
 
 ### Post install setup
-Before running the script, need to change some values in the certbot-auth.sh file.
+If you did not supply the API_USER and API_KEY during install, you can put them in the ncenv.env file. This is required before running the script.
 
 ```bash
-# Get your API key from https://ap.www.namecheap.com/settings/tools
+# Update the ncenv.env file with your api user and api key.
 API_USER="your-namecheap-username"
 API_KEY="your-namecheap-api-key"
 ```
