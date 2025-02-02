@@ -40,5 +40,5 @@ Use at your own risk.
 - The response file can be uploaded to Namecheap using the command:
 
 ```console
-/opt/certbot-auth/java -jar  
+sh nc-restore-dns.sh "backups/response-{}.xml" 
 ```
