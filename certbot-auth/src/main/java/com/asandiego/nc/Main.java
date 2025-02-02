@@ -43,10 +43,13 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+        File appDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        File backupDir = new File(appDir, "backup");
+        File logDir = new File(appDir, "log");
 
-        File responseFile = new File(String.format("backup/response-%s.xml",dateFormat.format(date)));
-        File requestFile = new File(String.format("backup/resquest-%s.txt",dateFormat.format(date)));
-        File logfile = new File(String.format("log/log-%s.txt", dateFormat.format(date)));
+        File responseFile = new File(backupDir, String.format("response-%s.xml",dateFormat.format(date)));
+        File requestFile = new File(backupDir, String.format(".resquest-%s.txt",dateFormat.format(date)));
+        File logfile = new File(logDir, String.format("log-%s.txt", dateFormat.format(date)));
         
         apiUser = args[0];
         apiKey = args[1];
@@ -96,7 +99,7 @@ public class Main {
                 .addParameter("TLD", tld)
                 .build();
         
-        writeLog(logfile, String.format("Get-URI: %s", getUri.toString()));
+        writeLog(logfile, String.format("getHosts-URI: %s", getUri.toString()));
 
         HttpRequest get = HttpRequest.newBuilder()
                 .uri(getUri)
@@ -105,9 +108,8 @@ public class Main {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> httpResponse = client.send(get, BodyHandlers.ofString());
-        System.out.println(httpResponse.body());
 
-        writeLog(logfile, String.format("Get-Response: %s", httpResponse.body()));
+        writeLog(logfile, String.format("getHosts-Response: %s", httpResponse.body()));
 
         XmlMapper mapper = new XmlMapper();
         ApiResponse apiResponse = mapper.readValue(httpResponse.body(), ApiResponse.class);
@@ -175,6 +177,8 @@ public class Main {
 
         URI postUri = builder.build();
 
+        writeLog(logfile, String.format("setHosts-URI: %s", postUri.toString()));
+
         FileOutputStream os = new FileOutputStream(requestFile);
         os.write(postUri.toString().replaceFirst("\\bApiKey=.*?(&|$)", "ApiKey=***&").getBytes());
         os.flush();
@@ -186,8 +190,7 @@ public class Main {
                 .build();
 
         HttpResponse<String> postResponse = client.send(post, BodyHandlers.ofString());
-
-        System.out.println(postResponse.body());
+        writeLog(logfile, String.format("setHosts-Response: %s", postResponse.body()));
     }
 
 }

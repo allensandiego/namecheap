@@ -44,12 +44,14 @@ public class Restore {
         }
 
         File responseXML = new File(responseFile);
-        
+                
         if (!responseXML.exists()) {
             System.out.println("File not found.");
             System.exit(1);
         }
 
+        System.out.println(responseFile);
+        
         XmlMapper mapper = new XmlMapper();
         ApiResponse response = mapper.readValue(responseXML, ApiResponse.class);
 
