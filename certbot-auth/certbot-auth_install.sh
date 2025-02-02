@@ -1,11 +1,13 @@
 #!/bin/bash
 
+jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64
+
+appname=certbot-auth
+appdir=/opt/$appname
+jdkdir=$appdir/$jdk
+
 echo
 echo "Installation started."
-
-set -e
-
-. certbot-auth.env
 
 echo
 echo "Install wget..."
@@ -19,6 +21,11 @@ fi
 
 cd $appdir
 
+echo "jdk=$jdk" >> certbot-auth.env
+echo "appname=$appname" >> certbot-auth.env
+echo "appdir=$appdir" >> certbot-auth.env
+echo "jdkdir=$jdkdir" >> certbot-auth.env
+
 echo
 echo "Download openjdk-jre-21..." 
 wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
@@ -30,12 +37,10 @@ tar xvzf $appdir/$jdk.tar.gz
 
 echo
 echo "Download namecheap certbot files..."
-wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.env
 wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh
 wget https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar
 wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/README.md
 
-chmod 755 $appdir/certbot-auth.env
 chmod 755 $appdir/certbot-auth.sh
 chmod 755 $appdir/certbot-auth.jar
 chmod 755 $appdir/README.md
