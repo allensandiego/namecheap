@@ -5,10 +5,7 @@ echo "Installation started."
 
 set -e
 
-appname=certbot-auth
-appdir=/opt/$appname
-jdk=openlogic-openjdk-jre-21.0.3+9-linux-x64.tar.gz
-ncenv=namecheap.env
+. certbot-auth.env
 
 echo
 echo "Install wget..."
@@ -28,15 +25,17 @@ wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/21.0.3+9/ope
 
 echo
 echo "Unzip openjdk-jre-21..."
-chmod 755 -R $appdir/$jdk
-tar xvzf $appdir/$jdk
+chmod 755 -R $appdir/$jdk.tar.gz
+tar xvzf $appdir/$jdk.tar.gz
 
 echo
 echo "Download namecheap certbot files..."
+wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.env
 wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth.sh
 wget https://github.com/allensandiego/namecheap/raw/refs/heads/main/certbot-auth/certbot-auth.jar
 wget https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/README.md
 
+chmod 755 $appdir/certbot-auth.env
 chmod 755 $appdir/certbot-auth.sh
 chmod 755 $appdir/certbot-auth.jar
 chmod 755 $appdir/README.md
@@ -46,13 +45,9 @@ echo "Enter your namecheap Api User and Api Key"
 read -p "Api User: " API_USER
 read -p "Api Key: " API_KEY
 
-if [ -f "$ncenv" ]; then
-  rm $ncenv
-fi
-
 echo
-echo "API_USER=$API_USER" >> $ncenv
-echo "API_KEY=$API_KEY" >> $ncenv
+echo "API_USER=$API_USER" >> $appdir/certbot-auth.env
+echo "API_KEY=$API_KEY" >> $appdir/certbot-auth.env
 
 echo
 echo "Installation finished."

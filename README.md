@@ -8,11 +8,11 @@ curl
 ### Installation
 Command will download open-jdk-jre-21, wget package, certbot-auth jar file and shell script file.
 ```bash
-curl -sSL https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth_install.sh | bash
+bash <(curl -s https://raw.githubusercontent.com/allensandiego/namecheap/refs/heads/main/certbot-auth/certbot-auth_install.sh)
 ```
 
 ### Post install setup
-If you did not supply the API_USER and API_KEY during install, you can put them in the ncenv.env file. This is required before running the script.
+If you did not provide the API_USER and API_KEY during install prompt, you can put them in the namecheap.env file. This is required before using the certboth-auth.sh script for certbot manual-auth-hook.
 
 ```bash
 # Update the ncenv.env file with your api user and api key.
@@ -35,3 +35,9 @@ A few notes about the script.
 
 Use at your own risk.
 
+- The script generates a file (response-{datetime}.xml) listing your current DNS records before updating your actual DNS records in Namecheap for back-up purposes.
+- The response file can be uploaded to Namecheap using the command:
+
+```console
+/opt/certbot-auth/java -jar  
+```
